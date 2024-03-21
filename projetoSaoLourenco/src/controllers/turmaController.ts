@@ -2,11 +2,11 @@ import { Request, Response } from "express";
 import TurmaModel from "../models/turmaModel";
 
 class TurmaController {
-  static async getTurmaById(req: Request, res: Response): Promise<void> {
-    const turmaId = req.params.id;
+  static async getTurmaByCPF(req: Request, res: Response): Promise<void> {
+    const turmaCPF = req.params.cpf;
 
     try {
-      const turma = await TurmaModel.findById(turmaId);
+      const turma = await TurmaModel.findByCPF(turmaCPF);
 
       if (turma) {
         res.status(200).json(turma);
@@ -43,11 +43,11 @@ class TurmaController {
   }
 
   static async updateTurma(req: Request, res: Response): Promise<void> {
-    const turmaId = req.params.id;
+    const turmaCPF = req.params.cpf;
     const dadosAtualizadosTurma = req.body;
 
     try {
-      const turmaExistente = await TurmaModel.findById(turmaId);
+      const turmaExistente = await TurmaModel.findByCPF(turmaCPF);
 
       if (turmaExistente) {
         const turmaAtualizada = new TurmaModel({
@@ -68,10 +68,10 @@ class TurmaController {
   }
 
   static async deleteTurma(req: Request, res: Response): Promise<void> {
-    const turmaId = req.params.id;
+    const turmaCPF = req.params.cpf;
 
     try {
-      await TurmaModel.excluirPorId(turmaId);
+      await TurmaModel.deleteByCPF(turmaCPF);
       res.status(204).send();
     } catch (error) {
       console.error(error);
