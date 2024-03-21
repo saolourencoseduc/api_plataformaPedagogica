@@ -1,16 +1,12 @@
-import { Request, Response, RequestHandler } from "express";
-import { ParsedQs } from "qs";
+import { Request, Response } from "express";
 import GestorModel from "../models/gestorModel";
 
 class GestorController {
-  static login: RequestHandler<{}, any, any, ParsedQs, Record<string, any>> =
-    async (req, res) => {};
-
-  static async getGestorById(req: Request, res: Response): Promise<void> {
-    const gestorId = req.params.id;
+  static async getGestorByCPF(req: Request, res: Response): Promise<void> {
+    const gestorCPF = req.params.cpf;
 
     try {
-      const gestor = await GestorModel.findById(gestorId);
+      const gestor = await GestorModel.findByCPF(gestorCPF);
 
       if (gestor) {
         res.status(200).json(gestor);
@@ -47,11 +43,11 @@ class GestorController {
   }
 
   static async updateGestor(req: Request, res: Response): Promise<void> {
-    const gestorId = req.params.id;
+    const gestorCPF = req.params.cpf;
     const dadosAtualizadosGestor = req.body;
 
     try {
-      const gestorExistente = await GestorModel.findById(gestorId);
+      const gestorExistente = await GestorModel.findByCPF(gestorCPF);
 
       if (gestorExistente) {
         const gestorAtualizado = new GestorModel({
@@ -72,10 +68,10 @@ class GestorController {
   }
 
   static async deleteGestor(req: Request, res: Response): Promise<void> {
-    const gestorId = req.params.id;
+    const gestorCPF = req.params.cpf;
 
     try {
-      await GestorModel.excluirPorId(gestorId);
+      await GestorModel.deleteByCPF(gestorCPF);
       res.status(204).send();
     } catch (error) {
       console.error(error);
