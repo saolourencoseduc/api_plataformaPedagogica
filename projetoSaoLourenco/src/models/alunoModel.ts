@@ -122,6 +122,22 @@ class AlunoModel {
   static async excluirPorId(id: string): Promise<void> {
     await this.pool.query("DELETE FROM alunos WHERE id = $1", [id]);
   }
+
+  static async findByCPF(cpf: string): Promise<AlunoModel | undefined> {
+    const result = await this.pool.query(
+      `
+      SELECT *
+      FROM alunos
+      WHERE cpf = $1
+    `,
+      [cpf]
+    );
+    return result.rows[0] ? new AlunoModel(result.rows[0]) : undefined;
+  }
+
+  static async deleteByCPF(cpf: string): Promise<void> {
+    await this.pool.query("DELETE FROM alunos WHERE cpf = $1", [cpf]);
+  }
 }
 
 export default AlunoModel;
