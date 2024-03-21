@@ -8,7 +8,6 @@ class GestorModel {
     connectionString: process.env.DATABASE_URL,
   });
 
-  id?: string;
   cpf?: string;
   nome?: string;
   escola?: string;
@@ -17,7 +16,6 @@ class GestorModel {
   login?: string;
 
   constructor(data: any = {}) {
-    this.id = data.id || undefined;
     this.cpf = data.cpf || undefined;
     this.nome = data.nome || undefined;
     this.escola = data.escola || undefined;
@@ -26,14 +24,14 @@ class GestorModel {
     this.login = data.login || undefined;
   }
 
-  static async findById(id: string): Promise<GestorModel | undefined> {
+  static async findByCPF(cpf: string): Promise<GestorModel | undefined> {
     const result = await this.pool.query(
       `
         SELECT *
         FROM gestores
-        WHERE id = $1
+        WHERE cpf = $1
       `,
-      [id]
+      [cpf]
     );
     return result.rows[0] ? new GestorModel(result.rows[0]) : undefined;
   }
@@ -52,7 +50,6 @@ class GestorModel {
     await this.pool.query(
       `
         INSERT INTO gestores (
-          id,
           cpf,
           nome,
           escola,
@@ -60,10 +57,9 @@ class GestorModel {
           telefones,
           login
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        VALUES ($1, $2, $3, $4, $5, $6)
       `,
       [
-        gestor.id,
         gestor.cpf,
         gestor.nome,
         gestor.escola,
@@ -80,29 +76,27 @@ class GestorModel {
       `
         UPDATE gestores
         SET
-          cpf = $1,
-          nome = $2,
-          escola = $3,
-          funcao = $4,
-          telefones = $5,
-          login = $6
-        WHERE id = $7
+          nome = $1,
+          escola = $2,
+          funcao = $3,
+          telefones = $4,
+          login = $5
+        WHERE cpf = $6
       `,
       [
-        gestor.cpf,
         gestor.nome,
         gestor.escola,
         gestor.funcao,
         gestor.telefones,
         gestor.login,
-        gestor.id,
+        gestor.cpf,
       ]
     );
     return gestor;
   }
 
-  static async excluirPorId(id: string): Promise<void> {
-    await this.pool.query("DELETE FROM gestores WHERE id = $1", [id]);
+  static async deleteByCPF(cpf: string): Promise<void> {
+    await this.pool.query("DELETE FROM gestores WHERE cpf = $1", [cpf]);
   }
 }
 
