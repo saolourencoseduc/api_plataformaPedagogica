@@ -8,9 +8,9 @@ router.get("/", async (req: Request, res: Response) => {
   await EscolaController.getAllEscolas(req, res);
 });
 
-// Get escola by ID
-router.get("/:id", async (req: Request, res: Response) => {
-  await EscolaController.getEscolaById(req, res);
+// Get escola by CPF
+router.get("/:cpf", async (req: Request, res: Response) => {
+  await EscolaController.getEscolaByCPF(req, res);
 });
 
 // Create new escola
@@ -18,14 +18,14 @@ router.post("/", async (req: Request, res: Response) => {
   await EscolaController.createEscola(req, res);
 });
 
-// Update escola by ID
-router.put("/:id", async (req: Request, res: Response) => {
-  await EscolaController.updateEscola(req, res);
+// Update escola by CPF
+router.put("/:cpf", async (req: Request, res: Response) => {
+  await EscolaController.updateEscolaByCPF(req, res);
 });
 
-// Delete escola by ID
-router.delete("/:id", async (req: Request, res: Response) => {
-  await EscolaController.deleteEscola(req, res);
+// Delete escola by CPF
+router.delete("/:cpf", async (req: Request, res: Response) => {
+  await EscolaController.deleteEscolaByCPF(req, res);
 });
 
 export default router;
