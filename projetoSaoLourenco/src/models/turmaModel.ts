@@ -1,6 +1,6 @@
 import { Pool } from "pg";
 
-export class TurmaModel {
+class TurmaModel {
   static pool = new Pool({
     ssl: {
       rejectUnauthorized: false,
@@ -8,7 +8,7 @@ export class TurmaModel {
     connectionString: process.env.DATABASE_URL,
   });
 
-  id: string;
+  cpf: string;
   escola: string;
   serie: string;
   ano: number;
@@ -17,7 +17,7 @@ export class TurmaModel {
   quantidadeAlunos: number;
 
   constructor(data: any = {}) {
-    this.id = data.id || undefined;
+    this.cpf = data.cpf || undefined;
     this.escola = data.escola || undefined;
     this.serie = data.serie || undefined;
     this.ano = data.ano || undefined;
@@ -26,14 +26,14 @@ export class TurmaModel {
     this.quantidadeAlunos = data.quantidadeAlunos || 0;
   }
 
-  static async findById(id: string): Promise<TurmaModel | undefined> {
+  static async findByCPF(cpf: string): Promise<TurmaModel | undefined> {
     const result = await this.pool.query(
       `
       SELECT *
-      FROM pea
-      WHERE id = $1
+      FROM turmas
+      WHERE cpf = $1
     `,
-      [id]
+      [cpf]
     );
     return result.rows[0] ? new TurmaModel(result.rows[0]) : undefined;
   }
@@ -42,7 +42,7 @@ export class TurmaModel {
     const result = await this.pool.query(
       `
       SELECT *
-      FROM pea
+      FROM turmas
     `
     );
     return result.rows.map((data: any) => new TurmaModel(data));
@@ -51,8 +51,8 @@ export class TurmaModel {
   static async save(turma: TurmaModel): Promise<TurmaModel> {
     await this.pool.query(
       `
-      INSERT INTO pea (
-        id,
+      INSERT INTO turmas (
+        cpf,
         escola,
         serie,
         ano,
@@ -63,7 +63,7 @@ export class TurmaModel {
       VALUES ($1, $2, $3, $4, $5, $6, $7)
     `,
       [
-        turma.id,
+        turma.cpf,
         turma.escola,
         turma.serie,
         turma.ano,
@@ -78,7 +78,7 @@ export class TurmaModel {
   static async update(turma: TurmaModel): Promise<TurmaModel> {
     await this.pool.query(
       `
-      UPDATE pea
+      UPDATE turmas
       SET
         escola = $1,
         serie = $2,
@@ -86,7 +86,7 @@ export class TurmaModel {
         nome = $4,
         turno = $5,
         quantidadeAlunos = $6
-      WHERE id = $7
+      WHERE cpf = $7
     `,
       [
         turma.escola,
@@ -95,16 +95,15 @@ export class TurmaModel {
         turma.nome,
         turma.turno,
         turma.quantidadeAlunos,
-        turma.id,
+        turma.cpf,
       ]
     );
     return turma;
   }
 
-  static async excluirPorId(id: string): Promise<void> {
-    await this.pool.query("DELETE FROM pea WHERE id = $1", [id]);
+  static async deleteByCPF(cpf: string): Promise<void> {
+    await this.pool.query("DELETE FROM turmas WHERE cpf = $1", [cpf]);
   }
 }
-
 
 export default TurmaModel;
