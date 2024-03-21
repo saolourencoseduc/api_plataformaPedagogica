@@ -8,9 +8,9 @@ router.get("/", async (req: Request, res: Response) => {
   await TurmaController.getAllTurmas(req, res);
 });
 
-// Get turma by ID
-router.get("/:id", async (req: Request, res: Response) => {
-  await TurmaController.getTurmaById(req, res);
+// Get turma by CPF
+router.get("/:cpf", async (req: Request, res: Response) => {
+  await TurmaController.getTurmaByCPF(req, res);
 });
 
 // Create new turma
@@ -18,13 +18,13 @@ router.post("/", async (req: Request, res: Response) => {
   await TurmaController.createTurma(req, res);
 });
 
-// Update turma by ID
-router.put("/:id", async (req: Request, res: Response) => {
+// Update turma by CPF
+router.put("/:cpf", async (req: Request, res: Response) => {
   await TurmaController.updateTurma(req, res);
 });
 
-// Delete turma by ID
-router.delete("/:id", async (req: Request, res: Response) => {
+// Delete turma by CPF
+router.delete("/:cpf", async (req: Request, res: Response) => {
   await TurmaController.deleteTurma(req, res);
 });
 
