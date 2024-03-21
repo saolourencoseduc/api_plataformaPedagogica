@@ -2,11 +2,11 @@ import { Request, Response } from 'express';
 import EscolaModel from '../models/escolaModel';
 
 class EscolaController {
-    static async getEscolaById(req: Request, res: Response): Promise<void> {
-        const escolaId = req.params.id;
+    static async getEscolaByCPF(req: Request, res: Response): Promise<void> {
+        const escolaCPF = req.params.cpf;
 
         try {
-            const escola = await EscolaModel.findById(escolaId);
+            const escola = await EscolaModel.findByCPF(escolaCPF);
 
             if (escola) {
                 res.status(200).json(escola);
@@ -42,12 +42,12 @@ class EscolaController {
         }
     }
 
-    static async updateEscola(req: Request, res: Response): Promise<void> {
-        const escolaId = req.params.id;
+    static async updateEscolaByCPF(req: Request, res: Response): Promise<void> {
+        const escolaCPF = req.params.cpf;
         const dadosAtualizadosEscola = req.body;
 
         try {
-            const escolaExistente = await EscolaModel.findById(escolaId);
+            const escolaExistente = await EscolaModel.findByCPF(escolaCPF);
 
             if (escolaExistente) {
                 const escolaAtualizada = new EscolaModel({
@@ -67,11 +67,11 @@ class EscolaController {
         }
     }
 
-    static async deleteEscola(req: Request, res: Response): Promise<void> {
-        const escolaId = req.params.id;
+    static async deleteEscolaByCPF(req: Request, res: Response): Promise<void> {
+        const escolaCPF = req.params.cpf;
 
         try {
-            await EscolaModel.excluirPorId(escolaId);
+            await EscolaModel.deleteByCPF(escolaCPF);
             res.status(204).send();
         } catch (error) {
             console.error(error);
