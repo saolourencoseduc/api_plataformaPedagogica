@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import { Pool } from "pg";
 
 dotenv.config();
+
 class EscolaModel {
   static pool = new Pool({
     ssl: {
@@ -111,6 +112,22 @@ class EscolaModel {
 
   static async excluirPorId(id: string): Promise<void> {
     await this.pool.query("DELETE FROM escolas WHERE id = $1", [id]);
+  }
+
+  static async findByCPF(cpf: string): Promise<EscolaModel | undefined> {
+    const result = await this.pool.query(
+      `
+        SELECT *
+        FROM escolas
+        WHERE cpf = $1
+      `,
+      [cpf]
+    );
+    return result.rows[0] ? new EscolaModel(result.rows[0]) : undefined;
+  }
+
+  static async deleteByCPF(cpf: string): Promise<void> {
+    await this.pool.query("DELETE FROM escolas WHERE cpf = $1", [cpf]);
   }
 }
 
