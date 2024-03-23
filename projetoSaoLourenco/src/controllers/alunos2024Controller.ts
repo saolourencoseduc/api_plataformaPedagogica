@@ -6,7 +6,7 @@ class Aluno2024Controller {
     try {
       const alunos = await Aluno2024.find();
       res.json(alunos);
-    } catch (error: any) { // Ajuste aqui
+    } catch (error) {
       res.status(500).json({ message: error.message });
     }
   }
@@ -19,7 +19,7 @@ class Aluno2024Controller {
         return;
       }
       res.json(aluno);
-    } catch (error: any) { // Ajuste aqui
+    } catch (error) {
       res.status(500).json({ message: error.message });
     }
   }
@@ -29,7 +29,7 @@ class Aluno2024Controller {
     try {
       const novoAluno = await aluno.save();
       res.status(201).json(novoAluno);
-    } catch (error: any) { // Ajuste aqui
+    } catch (error) {
       res.status(400).json({ message: error.message });
     }
   }
@@ -42,7 +42,7 @@ class Aluno2024Controller {
         return;
       }
       res.json(aluno);
-    } catch (error: any) { // Ajuste aqui
+    } catch (error) {
       res.status(400).json({ message: error.message });
     }
   }
@@ -55,7 +55,7 @@ class Aluno2024Controller {
         return;
       }
       res.json({ message: 'Aluno deleted successfully' });
-    } catch (error: any) { // Ajuste aqui
+    } catch (error) {
       res.status(500).json({ message: error.message });
     }
   }
