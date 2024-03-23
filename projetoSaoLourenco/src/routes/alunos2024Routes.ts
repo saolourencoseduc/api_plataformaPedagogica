@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import Aluno2024Controller from '../controllers/alunos2024Controllers'; // Ajuste aqui
+import Aluno2024Controller from '../controllers/alunos2024Controller';
 
 const router = express.Router();
 
