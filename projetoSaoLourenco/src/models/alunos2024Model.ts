@@ -35,3 +35,4 @@ const Aluno2024Schema: Schema = new Schema({
 });
 
 export default mongoose.model<IAluno2024>('Aluno2024', Aluno2024Schema);
+
