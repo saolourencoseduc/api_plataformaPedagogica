@@ -5,4 +5,3 @@ import TurmaModel from "./turmaModel";
 import Aluno2024Model from "./alunos2024Model";
 
 export { AlunoModel, EscolaModel, GestorModel, TurmaModel, Aluno2024Model };
-
