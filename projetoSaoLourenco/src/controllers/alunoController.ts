@@ -2,11 +2,26 @@ import { Request, Response } from "express";
 import AlunoModel from "../models/alunoModel";
 
 class AlunoController {
-  static async getAlunoById(req: Request, res: Response): Promise<void> {
-    const alunoId = req.params.id;
+  static async getAlunoByField(req: Request, res: Response): Promise<void> {
+    const field = req.params.field;
+    const value = req.params.value;
 
     try {
-      const aluno = await AlunoModel.findById(alunoId);
+      let aluno;
+      switch (field) {
+        case 'nome_completo':
+          aluno = await AlunoModel.findByNomeCompleto(value);
+          break;
+        case 'cpf':
+          aluno = await AlunoModel.findByCpf(value);
+          break;
+        case 'codigo_inep':
+          aluno = await AlunoModel.findByCodigoInep(value);
+          break;
+        default:
+          res.status(400).json({ message: "Invalid field" });
+          return;
+      }
 
       if (aluno) {
         res.status(200).json(aluno);
@@ -34,7 +49,7 @@ class AlunoController {
 
     try {
       const newAluno = new AlunoModel(alunoData);
-      const savedAluno = await AlunoModel.save(newAluno);
+      const savedAluno = await newAluno.save(); // Alterado aqui
       res.status(201).json(savedAluno);
     } catch (error) {
       console.error(error);
@@ -55,7 +70,7 @@ class AlunoController {
           ...updatedAlunoData,
         });
 
-        await AlunoModel.update(updatedAluno);
+        await updatedAluno.update(); // Alterado aqui
 
         res.status(200).json(updatedAluno);
       } else {
