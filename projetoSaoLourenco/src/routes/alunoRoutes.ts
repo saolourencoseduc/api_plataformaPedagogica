@@ -8,9 +8,9 @@ router.get("/", async (req: Request, res: Response) => {
   await AlunoController.getAllAlunos(req, res);
 });
 
-// Get aluno by ID
-router.get("/:id", async (req: Request, res: Response) => {
-  await AlunoController.getAlunoById(req, res);
+// Get aluno by field
+router.get("/:field/:value", async (req: Request, res: Response) => {
+  await AlunoController.getAlunoByField(req, res);
 });
 
 // Create new aluno
