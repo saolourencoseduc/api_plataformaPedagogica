@@ -9,27 +9,35 @@ class AlunoModel {
   });
 
   id: string;
-  unidadeEscolar: string;
-  regiaoEscola: string;
-  serie: string;
+  nome_completo: string;
+  cpf: string;
+  data_de_nascimento: Date;
+  escola: string;
+  codigo_inep: string;
   turma: string;
-  nomeCompleto: string;
-  estudanteComDeficiencia: boolean;
-  deficiencia: string;
-  cartaoRespostaPortuguesa: string;
-  cartaoRespostaMatematica: string;
+  serie: string;
+  curso: string;
+  ano: number;
+  turno: string;
+  nome_da_mae: string;
+  nome_do_pai: string;
+  nome_do_responsavel: string;
 
   constructor(data: any) {
     this.id = data.id || undefined;
-    this.unidadeEscolar = data.unidadeEscolar || undefined;
-    this.regiaoEscola = data.regiaoEscola || undefined;
-    this.serie = data.serie || undefined;
+    this.nome_completo = data.nome_completo || undefined;
+    this.cpf = data.cpf || undefined;
+    this.data_de_nascimento = data.data_de_nascimento || undefined;
+    this.escola = data.escola || undefined;
+    this.codigo_inep = data.codigo_inep || undefined;
     this.turma = data.turma || undefined;
-    this.nomeCompleto = data.nomeCompleto || undefined;
-    this.estudanteComDeficiencia = data.estudanteComDeficiencia || undefined;
-    this.deficiencia = data.deficiencia || undefined;
-    this.cartaoRespostaPortuguesa = data.cartaoRespostaPortuguesa || undefined;
-    this.cartaoRespostaMatematica = data.cartaoRespostaMatematica || undefined;
+    this.serie = data.serie || undefined;
+    this.curso = data.curso || undefined;
+    this.ano = data.ano || undefined;
+    this.turno = data.turno || undefined;
+    this.nome_da_mae = data.nome_da_mae || undefined;
+    this.nome_do_pai = data.nome_do_pai || undefined;
+    this.nome_do_responsavel = data.nome_do_responsavel || undefined;
   }
 
   static async findById(id: string): Promise<AlunoModel | undefined> {
@@ -44,6 +52,42 @@ class AlunoModel {
     return result.rows[0] ? new AlunoModel(result.rows[0]) : undefined;
   }
 
+  static async findByNomeCompleto(nomeCompleto: string): Promise<AlunoModel | undefined> {
+    const result = await this.pool.query(
+      `
+      SELECT *
+      FROM alunos
+      WHERE nome_completo = $1
+    `,
+      [nomeCompleto]
+    );
+    return result.rows[0] ? new AlunoModel(result.rows[0]) : undefined;
+  }
+
+  static async findByCpf(cpf: string): Promise<AlunoModel | undefined> {
+    const result = await this.pool.query(
+      `
+      SELECT *
+      FROM alunos
+      WHERE cpf = $1
+    `,
+      [cpf]
+    );
+    return result.rows[0] ? new AlunoModel(result.rows[0]) : undefined;
+  }
+
+  static async findByCodigoInep(codigoInep: string): Promise<AlunoModel | undefined> {
+    const result = await this.pool.query(
+      `
+      SELECT *
+      FROM alunos
+      WHERE codigo_inep = $1
+    `,
+      [codigoInep]
+    );
+    return result.rows[0] ? new AlunoModel(result.rows[0]) : undefined;
+  }
+
   static async findAll(): Promise<AlunoModel[]> {
     const result = await this.pool.query(
       `
@@ -54,69 +98,83 @@ class AlunoModel {
     return result.rows.map((data: any) => new AlunoModel(data));
   }
 
-  static async save(aluno: AlunoModel): Promise<AlunoModel> {
-    await this.pool.query(
+  async save(): Promise<AlunoModel> {
+    const result = await AlunoModel.pool.query(
       `
       INSERT INTO alunos (
-        id,
-        unidadeEscolar,
-        regiaoEscola,
-        serie,
+        nome_completo,
+        cpf,
+        data_de_nascimento,
+        escola,
+        codigo_inep,
         turma,
-        nomeCompleto,
-        estudanteComDeficiencia,
-        deficiencia,
-        cartaoRespostaPortuguesa,
-        cartaoRespostaMatematica
+        serie,
+        curso,
+        ano,
+        turno,
+        nome_da_mae,
+        nome_do_pai,
+        nome_do_responsavel
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+      RETURNING *
     `,
       [
-        aluno.id,
-        aluno.unidadeEscolar,
-        aluno.regiaoEscola,
-        aluno.serie,
-        aluno.turma,
-        aluno.nomeCompleto,
-        aluno.estudanteComDeficiencia,
-        aluno.deficiencia,
-        aluno.cartaoRespostaPortuguesa,
-        aluno.cartaoRespostaMatematica,
+        this.nome_completo,
+        this.cpf,
+        this.data_de_nascimento,
+        this.escola,
+        this.codigo_inep,
+        this.turma,
+        this.serie,
+        this.curso,
+        this.ano,
+        this.turno,
+        this.nome_da_mae,
+        this.nome_do_pai,
+        this.nome_do_responsavel,
       ]
     );
-    return aluno;
+    return new AlunoModel(result.rows[0]);
   }
 
-  static async update(aluno: AlunoModel): Promise<AlunoModel> {
-    await this.pool.query(
+  async update(): Promise<void> {
+    await AlunoModel.pool.query(
       `
       UPDATE alunos
       SET
-        unidadeEscolar = $1,
-        regiaoEscola = $2,
-        serie = $3,
-        turma = $4,
-        nomeCompleto = $5,
-        estudanteComDeficiencia = $6,
-        deficiencia = $7,
-        cartaoRespostaPortuguesa = $8,
-        cartaoRespostaMatematica = $9
-      WHERE id = $10
+        nome_completo = $1,
+        cpf = $2,
+        data_de_nascimento = $3,
+        escola = $4,
+        codigo_inep = $5,
+        turma = $6,
+        serie = $7,
+        curso = $8,
+        ano = $9,
+        turno = $10,
+        nome_da_mae = $11,
+        nome_do_pai = $12,
+        nome_do_responsavel = $13
+      WHERE id = $14
     `,
       [
-        aluno.unidadeEscolar,
-        aluno.regiaoEscola,
-        aluno.serie,
-        aluno.turma,
-        aluno.nomeCompleto,
-        aluno.estudanteComDeficiencia,
-        aluno.deficiencia,
-        aluno.cartaoRespostaPortuguesa,
-        aluno.cartaoRespostaMatematica,
-        aluno.id,
+        this.nome_completo,
+        this.cpf,
+        this.data_de_nascimento,
+        this.escola,
+        this.codigo_inep,
+        this.turma,
+        this.serie,
+        this.curso,
+        this.ano,
+        this.turno,
+        this.nome_da_mae,
+        this.nome_do_pai,
+        this.nome_do_responsavel,
+        this.id,
       ]
     );
-    return aluno;
   }
 
   static async excluirPorId(id: string): Promise<void> {
@@ -125,3 +183,4 @@ class AlunoModel {
 }
 
 export default AlunoModel;
+
