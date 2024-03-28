@@ -52,18 +52,6 @@ class AlunoModel {
     return result.rows[0] ? new AlunoModel(result.rows[0]) : undefined;
   }
 
-  static async findByNomeCompleto(nomeCompleto: string): Promise<AlunoModel | undefined> {
-    const result = await this.pool.query(
-      `
-      SELECT *
-      FROM alunos
-      WHERE nome_completo = $1
-    `,
-      [nomeCompleto]
-    );
-    return result.rows[0] ? new AlunoModel(result.rows[0]) : undefined;
-  }
-
   static async findByCpf(cpf: string): Promise<AlunoModel | undefined> {
     const result = await this.pool.query(
       `
