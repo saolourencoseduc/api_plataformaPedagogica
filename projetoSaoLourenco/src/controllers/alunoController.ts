@@ -2,27 +2,27 @@ import { Request, Response } from "express";
 import AlunoModel from "../models/alunoModel";
 
 class AlunoController {
-  static async getAlunoByField(req: Request, res: Response): Promise<void> {
-    const field = req.query.field as string;
-    const value = req.query.value as string;
+  static async getAlunoByNomeCompleto(req: Request, res: Response): Promise<void> {
+    const nomeCompleto = req.params.nomeCompleto;
 
     try {
-      let aluno;
-      switch (field) {
-        case 'nome_completo':
-          aluno = await AlunoModel.findByNomeCompleto(value);
-          break;
-        case 'cpf':
-          aluno = await AlunoModel.findByCpf(value);
-          break;
-        case 'codigo_inep':
-          aluno = await AlunoModel.findByCodigoInep(value);
-          break;
-        default:
-          res.status(400).json({ message: "Invalid field" });
-          return;
+      const aluno = await AlunoModel.findByNomeCompleto(nomeCompleto);
+      if (aluno) {
+        res.status(200).json(aluno);
+      } else {
+        res.status(404).json({ message: "Aluno not found" });
       }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
 
+  static async getAlunoByCpf(req: Request, res: Response): Promise<void> {
+    const cpf = req.params.cpf;
+
+    try {
+      const aluno = await AlunoModel.findByCpf(cpf);
       if (aluno) {
         res.status(200).json(aluno);
       } else {
@@ -49,7 +49,7 @@ class AlunoController {
 
     try {
       const newAluno = new AlunoModel(alunoData);
-      const savedAluno = await newAluno.save(); // Alterado aqui
+      const savedAluno = await newAluno.save();
       res.status(201).json(savedAluno);
     } catch (error) {
       console.error(error);
@@ -70,7 +70,7 @@ class AlunoController {
           ...updatedAlunoData,
         });
 
-        await updatedAluno.update(); // Alterado aqui
+        await updatedAluno.update();
 
         res.status(200).json(updatedAluno);
       } else {
