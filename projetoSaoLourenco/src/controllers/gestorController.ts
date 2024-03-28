@@ -32,21 +32,6 @@ class GestorController {
     }
   }
 
-  static async getGestorByNome(req: Request, res: Response): Promise<void> {
-    try {
-      const nome = req.params.nome;
-      const gestor = await GestorModel.findByNome(nome);
-      if (gestor) {
-        res.status(200).json(gestor);
-      } else {
-        res.status(404).json({ message: 'Gestor not found' });
-      }
-    } catch (error) {
-      console.error('Error getting gestor by name:', error);
-      res.status(500).json({ message: 'Internal server error' });
-    }
-  }
-
   static async getAllGestores(req: Request, res: Response): Promise<void> {
     try {
       const gestores = await GestorModel.findAll();
