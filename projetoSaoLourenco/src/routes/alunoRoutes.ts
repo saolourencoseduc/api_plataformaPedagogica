@@ -8,11 +8,6 @@ router.get("/", async (req: Request, res: Response) => {
   await AlunoController.getAllAlunos(req, res);
 });
 
-// Get aluno by nome completo
-router.get("/nome/:nomeCompleto", async (req: Request, res: Response) => {
-  await AlunoController.getAlunoByNomeCompleto(req, res);
-});
-
 // Get aluno by CPF
 router.get("/cpf/:cpf", async (req: Request, res: Response) => {
   await AlunoController.getAlunoByCpf(req, res);
