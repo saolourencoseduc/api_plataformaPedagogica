@@ -9,7 +9,15 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 // Get aluno by field
-router.get("/:field/:value", async (req: Request, res: Response) => {
+router.get("/search", async (req: Request, res: Response) => {
+  const field = req.query.field as string;
+  const value = req.query.value as string;
+  
+  if (!field || !value) {
+    res.status(400).json({ message: "Missing field or value" });
+    return;
+  }
+
   await AlunoController.getAlunoByField(req, res);
 });
 
