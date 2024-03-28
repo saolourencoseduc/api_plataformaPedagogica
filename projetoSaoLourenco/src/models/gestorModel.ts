@@ -136,18 +136,6 @@ class GestorModel {
     return result.rows[0] ? new GestorModel(result.rows[0]) : undefined;
   }
 
-  static async findByNome(nome: string): Promise<GestorModel | undefined> {
-    const result = await this.pool.query(
-      `
-        SELECT *
-        FROM gestores
-        WHERE nome_completo = $1
-      `,
-      [nome]
-    );
-    return result.rows[0] ? new GestorModel(result.rows[0]) : undefined;
-  }
-
   static async deleteByCpf(cpf: string): Promise<void> {
     await this.pool.query(
       `
