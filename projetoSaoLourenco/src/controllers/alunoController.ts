@@ -2,22 +2,6 @@ import { Request, Response } from "express";
 import AlunoModel from "../models/alunoModel";
 
 class AlunoController {
-  static async getAlunoByNomeCompleto(req: Request, res: Response): Promise<void> {
-    const nomeCompleto = req.params.nomeCompleto;
-
-    try {
-      const aluno = await AlunoModel.findByNomeCompleto(nomeCompleto);
-      if (aluno) {
-        res.status(200).json(aluno);
-      } else {
-        res.status(404).json({ message: "Aluno not found" });
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  }
-
   static async getAlunoByCpf(req: Request, res: Response): Promise<void> {
     const cpf = req.params.cpf;
 
@@ -96,3 +80,4 @@ class AlunoController {
 }
 
 export default AlunoController;
+
