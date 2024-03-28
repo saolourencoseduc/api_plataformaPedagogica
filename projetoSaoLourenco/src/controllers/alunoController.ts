@@ -3,8 +3,8 @@ import AlunoModel from "../models/alunoModel";
 
 class AlunoController {
   static async getAlunoByField(req: Request, res: Response): Promise<void> {
-    const field = req.params.field;
-    const value = req.params.value;
+    const field = req.query.field as string;
+    const value = req.query.value as string;
 
     try {
       let aluno;
