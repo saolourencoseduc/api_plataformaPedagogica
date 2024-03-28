@@ -8,9 +8,17 @@ router.get("/", async (req: Request, res: Response) => {
   await AlunoController.getAllAlunos(req, res);
 });
 
-// Get aluno by ID
-router.get("/:id", async (req: Request, res: Response) => {
-  await AlunoController.getAlunoById(req, res);
+// Get aluno by field
+router.get("/search", async (req: Request, res: Response) => {
+  const field = req.query.field as string;
+  const value = req.query.value as string;
+  
+  if (!field || !value) {
+    res.status(400).json({ message: "Missing field or value" });
+    return;
+  }
+
+  await AlunoController.getAlunoByField(req, res);
 });
 
 // Create new aluno
