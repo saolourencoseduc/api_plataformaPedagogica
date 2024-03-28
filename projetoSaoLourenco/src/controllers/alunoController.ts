@@ -80,4 +80,3 @@ class AlunoController {
 }
 
 export default AlunoController;
-
