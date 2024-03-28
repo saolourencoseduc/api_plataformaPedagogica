@@ -183,4 +183,3 @@ class AlunoModel {
 }
 
 export default AlunoModel;
-
